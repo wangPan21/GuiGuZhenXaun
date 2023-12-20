@@ -1,18 +1,11 @@
 <template>
-    <div>
-        用户管理
-    </div>
+  <div>用户管理</div>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 <script lang="ts">
 export default {
-    name:'user'
+  name: 'user',
 }
 </script>
-<style lang="scss" scoped>
-
-
-</style>
+<style lang="scss" scoped></style>

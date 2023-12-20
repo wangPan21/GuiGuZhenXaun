@@ -4,8 +4,8 @@ import { ElMessage } from 'element-plus'
 //@ts-ignore
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-
-NProgress.configure({ showSpinner: false });
+import useuserStore from '@/store/modules/user'
+NProgress.configure({ showSpinner: false })
 
 //利用create方法，创建axios实例,配置基础路径与响应时间
 let request = axios.create({
@@ -15,9 +15,16 @@ let request = axios.create({
 
 //请求拦截器
 request.interceptors.request.use((config) => {
+  //进度条开始
   NProgress.start()
+
+  //登陆成功后，将token携带给服务器
+  let userState = useuserStore();
+  if (userState.token) {
+    config.headers.token = userState.token;
+  }
   //返回配置对象
-  return config;
+  return config
 })
 
 //响应拦截器
@@ -52,12 +59,12 @@ request.interceptors.response.use(
     }
     //弹出的错误信息
     ElMessage({
-        type:"error",
-        message
+      type: 'error',
+      message,
     })
-    return Promise.reject(error);
+    return Promise.reject(error)
   },
 )
 
 //对外暴漏request
-export default request;
+export default request

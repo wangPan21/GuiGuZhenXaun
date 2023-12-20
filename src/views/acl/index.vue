@@ -1,18 +1,11 @@
 <template>
-    <div>
-        <router-view></router-view>
-    </div>
+    <router-view></router-view>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 <script lang="ts">
 export default {
-    name:'acl'
+  name: 'acl',
 }
 </script>
-<style lang="scss" scoped>
-
-
-</style>
+<style lang="scss" scoped></style>

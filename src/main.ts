@@ -12,9 +12,11 @@ import totalModule from '@/components'
 //引入scss样式
 import '@/style/index.scss'
 //引入路由
-import router from "./router";
+import router from './router'
 //引入仓库
 import pinia from './store'
+//引入路由鉴权配置文件
+import './permisstion'
 
 //获取应用实例对象
 const app = createApp(App)
@@ -28,10 +30,10 @@ app.use(ElementPlus, {
 app.use(totalModule)
 
 //注册模版路由
-app.use(router);
+app.use(router)
 
 //注册仓库
-app.use(pinia);
+app.use(pinia)
 
 //将应用挂载到挂载点上
 app.mount('#app')

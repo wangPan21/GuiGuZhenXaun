@@ -1,18 +1,11 @@
 <template>
-    <div>
-        spu管理
-    </div>
+  <div>spu管理</div>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 <script lang="ts">
 export default {
-    name:'spu'
+  name: 'spu',
 }
 </script>
-<style lang="scss" scoped>
-
-
-</style>
+<style lang="scss" scoped></style>

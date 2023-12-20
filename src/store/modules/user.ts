@@ -1,15 +1,16 @@
 //创建用户小仓库
 import { defineStore } from 'pinia'
-import { reqLogin } from '@/api/user/index'
+import { reqLogin, reqUserInfo } from '@/api/user/index'
 import type { loginResponseData, loginForm } from '@/api/user/type'
 import type { UserState } from './dataType/type'
-import { SET_TOKEN, GET_TOKEN} from "@/utils/token";
+import { SET_TOKEN, GET_TOKEN, DEL_TOKEN } from '@/utils/token'
 //创建用户小仓库
 let useuserStore = defineStore('User', {
   //小仓库存储数据的地方
   state: (): UserState => {
     return {
-      // userinfo:{},
+      username: '',
+      avatar: '',
       token: GET_TOKEN(), //用户唯一标识
     }
   },
@@ -21,13 +22,37 @@ let useuserStore = defineStore('User', {
       let result: loginResponseData = await reqLogin(data)
       if (result.code == 200) {
         //存储token到仓库
-        this.token = result.data.token  as string
+        this.token = result.data.token as string
         //本地持久化存储token
-        SET_TOKEN(result.data.token  as string)
+        SET_TOKEN(result.data.token as string)
         return 'ok'
       } else {
         return Promise.reject(result.data.message)
       }
+    },
+
+    //获取用户信息的方法
+    async userInfo() {
+      //发送请求
+      let result = await reqUserInfo()
+      if ((result.code = 200)) {
+        //存储用户的头像、姓名
+        this.username = result.data.checkUser.username
+        this.avatar = result.data.checkUser.avatar
+        return 'ok'
+      } else {
+        return Promise.reject('error')
+      }
+    },
+
+    //退出登录
+    delLogin() {
+      //清除头像，与名字\token
+      this.username = ''
+      this.avatar = ''
+      this.token = ''
+      // 清除token
+      DEL_TOKEN()
     },
   },
   //简化仓库数据

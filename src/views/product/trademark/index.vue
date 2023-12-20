@@ -1,18 +1,11 @@
 <template>
-    <div>
-        品牌管理
-    </div>
+  <div>品牌管理</div>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 <script lang="ts">
 export default {
-    name:'trademark'
+  name: 'trademark',
 }
 </script>
-<style lang="scss" scoped>
-
-
-</style>
+<style lang="scss" scoped></style>

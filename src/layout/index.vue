@@ -2,84 +2,24 @@
     <div class="container">
         <el-row>
             <!-- 左侧菜单 -->
-            <el-col :span="5">
-                <div class="left">
-                    <!-- 头部 -->
-                    <h5 style="display: flex; align-items: center; justify-content: center; ">
-                        <SvgIcon name="icon" width="100" height="100"></SvgIcon>
-                        <span style="font-size: 22px; font-weight:bolder;">硅谷甄选运营平台</span>
-                    </h5>
-                    <el-menu active-text-color="#ffd04b" background-color="#01152a" :default-active="$route.path" text-color="#fff" :router="true">
-                        <el-menu-item index="/home" @click="goRoute('/home')">
-                            <el-icon>
-                                <HomeFilled />
-                            </el-icon>
-                            <span>首页</span>
-                        </el-menu-item>
-                        <el-menu-item index="/screen" @click="goRoute('/screen')">
-                            <el-icon>
-                                <Monitor />
-                            </el-icon>
-                            <span>数据大屏</span>
-                        </el-menu-item>
-                        <el-sub-menu index="/acl/user" >
-                            <template #title>
-                                <el-icon>
-                                    <Lock />
-                                </el-icon>
-                                <span>权限管理</span>
-                            </template>
-                            <el-menu-item index="/acl/user" @click="goRoute('/acl/user')">
-                                <el-icon><User /></el-icon>
-                                <span>用户管理</span>
-                            </el-menu-item>
-                            <el-menu-item index="/acl/role" @click="goRoute('/acl/role')">
-                                <el-icon><UserFilled /></el-icon>
-                                <span>角色管理</span>
-                            </el-menu-item>
-                            <el-menu-item index="/acl/permission" @click="goRoute('/acl/permission')">
-                                <el-icon><Menu /></el-icon>
-                                <span>菜单管理</span>
-                            </el-menu-item>
-                        </el-sub-menu>
-                        <el-sub-menu index="/product/trademark">
-                            <template #title>
-                                <el-icon>
-                                    <Handbag />
-                                </el-icon>
-                                <span>商品管理</span>
-                            </template>
-                            <el-menu-item index="/product/trademark" @click="goRoute('/product/trademark')">
-                                <el-icon><ShoppingCart /></el-icon>
-                                <span>品牌管理</span>
-                            </el-menu-item>
-                            <el-menu-item index="/product/attr" @click="goRoute('/product/attr')">
-                                <el-icon><Operation /></el-icon>
-                                <span>属性管理</span>
-                            </el-menu-item>
-                            <el-menu-item index="/product/spu" @click="goRoute('/product/spu')">
-                                <el-icon><CollectionTag /></el-icon>
-                                <span>SPU管理</span>
-                            </el-menu-item>
-                            <el-menu-item index="/product/sku" @click="goRoute('/product/sku')">
-                                <el-icon><PriceTag /></el-icon>
-                                <span>SKU管理</span>
-                            </el-menu-item>
-                        </el-sub-menu>
-                    </el-menu>
-                </div>
+            <el-col :span="uselayoutStore.fold ? 2 : 5" class="transition">
+                <Manu></Manu>
             </el-col>
 
             <!-- 右侧展示内容 -->
-            <el-col :span="19">
+            <el-col :span="uselayoutStore.fold ? 22 : 19" class="transition">
                 <div class="right">
-
                     <!-- 导航栏 -->
-                    <div class="top">1223</div>
-
+                    <div class="top">
+                        <Tabbar></Tabbar>
+                    </div>
                     <!-- 内容展示区 -->
                     <div class="bottom">
-                        <router-view></router-view>
+                        <router-view v-slot="{ Component }">
+                            <transition name="fade">
+                                <component :is="Component" v-if="destroy" />
+                            </transition>
+                        </router-view>
                     </div>
                 </div>
             </el-col>
@@ -88,47 +28,38 @@
 </template>
 
 <script lang="ts" setup>
-import { Lock, User,HomeFilled,Menu,UserFilled, Monitor, Handbag,ShoppingCart, Operation,CollectionTag,PriceTag} from '@element-plus/icons-vue'
-import { useRouter,useRoute } from "vue-router";
+import { watch, nextTick, ref } from 'vue';
+import Tabbar from "./tabbar/index.vue";
+import Manu from "./memu/index.vue";
+import useLayOutStore from "@/store/modules/seting";
 
-//创建路由器
-let $router =useRouter();
+//初始化仓库实例
+let uselayoutStore = useLayOutStore();
 
-//获取当前路由信息
-let $route =useRoute();
+//控制是否销毁路由与创建
+let destroy = ref<boolean>(true);
 
-//点击菜单的回调
-const goRoute =(path:string)=>{
-    $router.push({path})    
-}
+//监听tabbar组件是否点击刷新按钮
+watch(() => uselayoutStore.refash, () => {
+    //点击刷新按钮，销毁组件
+    destroy.value = false;
+    // dom更新完毕，渲染组件
+    nextTick(() => {
+        destroy.value = true;
+    })
+})
+
 </script>
 <script lang="ts">
 export default {
-    name: 'first'
-} 
+    name: 'layout',
+}
 </script>
 <style lang="scss" scoped>
 .container {
     width: 100%;
     height: 100vh;
-
-    .left {
-        width: 100%;
-        height: 100vh;
-        color: white;
-        background-color: #01152a;
-
-        .el-menu-item  {
-            margin-left: 10px;
-        }
-        .el-sub-menu{
-            margin-left: 10px;
-            .el-sub-menu__title{
-                display: flex;
-                
-            }
-        }
-    }
+    overflow: hidden;
 
     .right {
         width: 100%;
@@ -137,12 +68,39 @@ export default {
 
         .top {
             width: 100%;
-            height: 10vh;
+            height: 9vh;
+            display: flex;
+            align-items: center;
+            padding: 0 0 0 10px;
+            border-bottom: 1px solid #eee;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         }
 
         .bottom {
             width: 100%;
             height: 90vh;
+            padding: 20px 20px 0 20px;
+            // background-color: #ee1515;
         }
     }
-}</style>
+
+    .transition {
+        transition: all .7s ease-in-out, opacity 1.2s cubic-bezier(0.25, 0.1, 0.5, 1);
+    }
+}
+
+//页面过渡动画
+.fade-enter-from {
+    opacity: 0;
+    transform: translateX(20%);
+}
+
+.fade-enter-active {
+    transition: opacity 1.2s cubic-bezier(0.25, 0.1, 0.5, 1), transform .6s cubic-bezier(0.25, 0.1, 0.5, 1);
+}
+
+.fade-enter-to {
+    opacity: 1;
+    transform: translateX(0);
+}
+</style>
