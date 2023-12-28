@@ -19,9 +19,9 @@ request.interceptors.request.use((config) => {
   NProgress.start()
 
   //登陆成功后，将token携带给服务器
-  let userState = useuserStore();
+  let userState = useuserStore()
   if (userState.token) {
-    config.headers.token = userState.token;
+    config.headers.token = userState.token
   }
   //返回配置对象
   return config

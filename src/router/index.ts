@@ -15,8 +15,6 @@ let router = createRouter({
       left: 0,
     }
   },
-
-  
 })
 
 //对外暴漏路由

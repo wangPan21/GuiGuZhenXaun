@@ -56,7 +56,7 @@ let userStore = useuserStore()
 //存储用户账号密码
 let userInfo = reactive({
   username: 'admin',
-  password: '111111',
+  password: 'atguigu123',
 })
 
 //拷贝数据
@@ -125,7 +125,7 @@ const validatename = (rule: any, value: any, callback: any) => {
 
 //自定义密码校验规则
 const validatepass = (rule: any, value: any, callback: any) => {
-  const regular = /^[a-zA-Z0-9]{6}$/
+  const regular = /^[a-zA-Z0-9]{10}$/
   if (regular.test(value)) {
     //符合规则
     callback()

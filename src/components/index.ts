@@ -1,5 +1,5 @@
 //引入项目中全部的全局组件
-import SvgIcon from './SvgIcon/index.vue'
+import SvgIcon from './svgIcon/index.vue'
 
 //全局对象
 const allmoduls = { SvgIcon }
