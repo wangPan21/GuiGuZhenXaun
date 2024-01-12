@@ -2,7 +2,7 @@
   <div class="spu-container">
     <!-- 三级分类 -->
     <el-card class="box-cards">
-      <el-form :inline="true">
+      <el-form :inline="true" style="display: flex;">
         <!-- 一级分类 -->
         <el-form-item label="一级分类">
           <el-select placeholder="请选择" clearable v-model="category1Id" @change="reqCategoryone" :disabled="showbox == 2">
@@ -34,7 +34,9 @@
     <el-card class="box-card" v-show="showbox == 1">
       <template #header>
         <div class="card-header">
-          <el-button type="primary" :icon="Plus" @click="pushSpu" :disabled="trims">添加SPU</el-button>
+          <el-button type="primary" :icon="Plus" @click="pushSpu" :disabled="trims">
+            添加SPU
+          </el-button>
         </div>
       </template>
       <!-- 表单主体 -->
@@ -46,18 +48,18 @@
           <el-table-column label="操作" width="220" align="center">
             <template #="{ row, $index }">
               <!-- 添加按钮 -->
-              <el-button type="primary" :icon="Plus" size="small" @click="addSpu(row)"> </el-button>
+              <el-button type="primary" :icon="Plus" size="small" @click="addSpu(row)"></el-button>
 
               <!-- 修改按钮 -->
-              <el-button type="warning" :icon="Edit" size="small" @click="editSpu(row)"> </el-button>
+              <el-button type="warning" :icon="Edit" size="small" @click="editSpu(row)"></el-button>
 
               <!-- 详情按钮 -->
-              <el-button type="info" :icon="Warning" size="small" @click="infoSpu(row)"> </el-button>
+              <el-button type="info" :icon="Warning" size="small" @click="infoSpu(row)"></el-button>
 
               <!-- 删除按钮 -->
-              <el-popconfirm :title="`删除属性${row.attrName}吗？`" @confirm="deletes(row)">
+              <el-popconfirm :title="`删除属性${row.spuName}吗？`" @confirm="deletes(row)">
                 <template #reference>
-                  <el-button type="danger" :icon="Delete" size="small"> </el-button>
+                  <el-button type="danger" :icon="Delete" size="small"></el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -67,7 +69,6 @@
 
       <!-- 分页器 -->
       <template #footer>
-
         <!-- 分页器   -->
         <el-pagination v-model:current-page="pageNo" v-model:page-size="limit" :page-sizes="[9, 10, 15, 20]"
           :background="true" layout=" prev, pager, next,jumper,->,sizes,total" :total="total"
@@ -79,18 +80,45 @@
     <spuFrom v-show="showbox == 2" @change="change" ref="spu"></spuFrom>
 
     <!-- sku数据修改与新增 -->
-    <skuFrom v-show="showbox == 3"></skuFrom>
+    <skuFrom v-show="showbox == 3" @change="change" ref="sku"></skuFrom>
+
+    <!-- dialog对话框：展示已有的sku数据 -->
+    <el-dialog v-model="dialogVisible" title="SKU列表" width="70%">
+      <el-table border :data="SkuArr" style="width: 100%">
+        <el-table-column label="SKU名称" prop="skuName" align="center"></el-table-column>
+        <el-table-column label="SKU价格" prop="price" width="90" align="center"></el-table-column>
+        <el-table-column label="SKU重量" prop="weight" width="90" align="center"></el-table-column>
+        <el-table-column label="SKU图片" align="center">
+          <template #="{ row, $index }">
+            <img :src="row.skuDefaultImg" alt="" style="width: 100px; height:100px;">
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import { reqGetCategoryone, reqGetCategorytwo, reqGetCategorythree, reqSpuList } from "@/api/product/index";
-import type { CategoryAll, HasSpuResponseData, SPUData} from "@/api/product/type";
-import { Plus, Edit, Warning, Delete } from "@element-plus/icons-vue";
-import spuFrom from "@/views/product/spu/spuFrom/index.vue";
-import skuFrom from "@/views/product/spu/skuFrom/index.vue";
-// import { ElMessage } from "element-plus";
+import { ref, onMounted } from 'vue'
+import {
+  reqGetCategoryone,
+  reqGetCategorytwo,
+  reqGetCategorythree,
+  reqSpuList,
+  reqSkuView,
+  deleleSPU
+} from '@/api/product/index'
+import type {
+  CategoryAll,
+  HasSpuResponseData,
+  SPUData,
+  SkuData,
+  SkuInfoData
+} from '@/api/product/type'
+import { Plus, Edit, Warning, Delete } from '@element-plus/icons-vue'
+import spuFrom from '@/views/product/spu/spuFrom/index.vue'
+import skuFrom from '@/views/product/spu/skuFrom/index.vue'
+import { ElMessage } from 'element-plus'
 
 let category1Id = ref<number>()
 let category2Id = ref<number>()
@@ -116,7 +144,10 @@ let limit = ref<number>(5)
 let total = ref<number>(100)
 
 //初始化组件实例spu
-let spu = ref<any>();
+let spu = ref<any>()
+
+//初始化组件实例sku
+let sku = ref<any>()
 
 //存储spu分类的数据
 let spuList = ref()
@@ -130,17 +161,23 @@ let c2Spu = ref<any>([])
 //存储三级分类的数据
 let c3Spu = ref<any>([])
 
+//存储全部的sku数据
+let SkuArr = ref<SkuData[]>([])
+
+//控制对话框的显示与隐藏
+let dialogVisible = ref(false)
+
 //组件挂载完毕
 onMounted(() => {
   // 获取一级分类的数据
-  reqCategory();
+  reqCategory()
 })
 
 // 获取一级分类的数据
 const reqCategory = async () => {
-  let result1: CategoryAll = await reqGetCategoryone();
+  let result1: CategoryAll = await reqGetCategoryone()
   if (result1.code == 200) {
-    c1Spu.value = result1.data;
+    c1Spu.value = result1.data
   }
 }
 
@@ -151,14 +188,16 @@ const reqCategoryone = async () => {
   showbox.value = 1
   pageNo.value = 1
   trims.value = true
-  //将二三级分类数据清空
-  category2Id.value = copyData.value,
-    category3Id.value = copyData.value,
-    //一级分类选中后解锁二级分类
-    select1.value = false;
-  let result2: CategoryAll = await reqGetCategorytwo(category1Id.value as number)
+    //将二三级分类数据清空
+    ; (category2Id.value = copyData.value),
+      (category3Id.value = copyData.value),
+      //一级分类选中后解锁二级分类
+      (select1.value = false)
+  let result2: CategoryAll = await reqGetCategorytwo(
+    category1Id.value as number,
+  )
   if (result2.code == 200) {
-    c2Spu.value = result2.data;
+    c2Spu.value = result2.data
   }
 }
 
@@ -169,95 +208,114 @@ const reqCategorytwo = async () => {
   showbox.value = 1
   pageNo.value = 1
   trims.value = true
-  //将二三级分类数据清空
-  category3Id.value = copyData.value,
-    //二级分类选中后解锁三级分类
-    select2.value = false;
-  let result3: CategoryAll = await reqGetCategorythree(category2Id.value as number)
+    //将二三级分类数据清空
+    ; (category3Id.value = copyData.value),
+      //二级分类选中后解锁三级分类
+      (select2.value = false)
+  let result3: CategoryAll = await reqGetCategorythree(
+    category2Id.value as number,
+  )
   if (result3.code == 200) {
-    c3Spu.value = result3.data;
+    c3Spu.value = result3.data
   }
 }
 
 //三级分类发生变化的回调
 const reqCategorythree = () => {
-  trims.value = false;
+  trims.value = false
   // 当下拉框发生变化时，清空分类列表的数据
   spuList.value = []
   showbox.value = 1
   pageNo.value = 1
   //请求数据
-  reqData();
+  reqData()
 }
 
 //获取分类列表详情
 const reqData = async () => {
   //@ts-ignore
-  let result4: HasSpuResponseData = await reqSpuList(pageNo.value, limit.value, category3Id.value,);
+  let result4: HasSpuResponseData = await reqSpuList(
+    pageNo.value,
+    limit.value,
+    category3Id.value as number,
+  )
   if (result4.code == 200) {
-    spuList.value = result4.data.records;
-    total.value = result4.data.total;
+    spuList.value = result4.data.records
+    total.value = result4.data.total
   }
 }
 
 //新增按钮的回调
 const pushSpu = async () => {
-    // // 清空数据
-    // reset()
-    //切换场景
-    showbox.value = 2
-    // //@ts-ignore
-    // attrParams.categoryId = category3Id.value
-
+  //切换场景
+  showbox.value = 2
+  spu.value.addSpu(category3Id)
 }
 
 //添加按钮的回调
 const addSpu = (row: any) => {
-    console.log(row);
-    // 切换场景
-    showbox.value = 2;
+  // 切换场景
+  showbox.value = 3
+  //调用自组件方法
+  sku.value.initSkuData(category1Id, category2Id, row)
+
 }
 
 //修改按钮的回调
 const editSpu = (row: SPUData) => {
   // 切换场景
-  showbox.value = 2;
+  showbox.value = 2
   //调用组件实例方法，获取完整的spu数据
-  spu.value.getData(row);
+  spu.value.getData(row)
 }
 
 //详情按钮的回调
-const infoSpu = (row: any) => {
-    console.log(row);
+const infoSpu = async (row: SPUData) => {
+  let result: SkuInfoData = await reqSkuView(row.id as number)
+  if (result.code == 200) {
+    SkuArr.value = result.data
+    //显示对话框
+    dialogVisible.value = true
+  }
 }
 
 //删除按钮的回调
-const deletes = (row: any) => {
-    console.log(row);
+const deletes = async (row: SPUData) => {
+  let resultq: any = await deleleSPU(row.id as number)
+  console.log(resultq);
+  if (resultq.code == 200) {
+    ElMessage({
+      type: 'success',
+      message: '删除成功'
+    })
+    //刷新页面
+    reqData()
+  }
 }
 
 //分页器当前页发生变化触发的回调
 const handleCurrentChange = (page: number) => {
-    //修改当前页
-    pageNo.value = page;
-    // 再次发送请求
-    reqData();
+  //修改当前页
+  pageNo.value = page
+  // 再次发送请求
+  reqData()
 }
 
 //分页器每页展示几条数据触发的回调
 const handleSizeChange = (limit: number) => {
-    pageNo.value = 1;
-    //修改每页展示多少条数据
-    limit = limit;
-    // 再次发送请求
-    reqData();
+  pageNo.value = 1
+  //修改每页展示多少条数据
+  limit = limit
+  // 再次发送请求
+  reqData()
 }
 
 //自组件spuFrom绑定的自定义事件
-const change =(num:number)=>{
+const change = (num: number) => {
   showbox.value = num;
+  //发送请求
+  reqData()
 }
-
 </script>
 <script lang="ts">
 export default {

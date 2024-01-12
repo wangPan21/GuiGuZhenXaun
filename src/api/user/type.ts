@@ -20,11 +20,10 @@ export interface loginResponseData extends ResponseData {
 //定义获取用户信息接口返回数据的ts类型
 export interface userResponseData extends ResponseData {
   data: {
-    avatar:string,
-    buttons:string[],
-    name:string,
-    roles:string[],
-    routes:string[],
-
+    avatar: string
+    buttons: string[]
+    name: string
+    roles: string[]
+    routes: string[]
   }
 }

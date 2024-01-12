@@ -22,7 +22,6 @@
                 </transition>
               </router-view>
             </el-scrollbar>
-
           </div>
         </div>
       </el-col>

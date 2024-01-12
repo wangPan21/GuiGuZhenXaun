@@ -5,7 +5,12 @@
         <component :is="uselayoutStore.fold ? Fold : Expand"></component>
       </el-icon>
       <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item v-for="(item, index) in $route.matched" :key="index" :to="item.path" v-show="item.meta.title">
+        <el-breadcrumb-item
+          v-for="(item, index) in $route.matched"
+          :key="index"
+          :to="item.path"
+          v-show="item.meta.title"
+        >
           {{ item.meta.title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -76,9 +81,7 @@ const refresh = () => {
 const delToken = async () => {
   try {
     await userStore.delLogin()
-  } catch {
-
-  }
+  } catch {}
 }
 
 //去登录按钮回调

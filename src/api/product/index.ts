@@ -9,7 +9,12 @@ import type {
   ALLTradeMarkSPU,
   ALLSpuImage,
   ALLSpuSaLes,
-  ALLSpuSaLess
+  ALLSpuSaLess,
+  SPUData,
+  SkuData,
+  SkuInfoData,
+  SkuResponseData,
+  SkuDatas,
 } from './type'
 
 enum API {
@@ -27,7 +32,15 @@ enum API {
   GETSPUALL_URL = '/admin/product/baseTrademark/getTrademarkList',
   GETSPUIMAGE_URL = '/admin/product/spuImageList/',
   GETSPUSALE_URL = '/admin/product/spuSaleAttrList/',
-  GETSPUSALELIST_URL ='/admin/product/baseSaleAttrList'
+  GETSPUSALELIST_URL = '/admin/product/baseSaleAttrList',
+  ADDLIST_URL = '/admin/product/saveSpuInfo',
+  EDITLIST_URL = '/admin/product/updateSpuInfo',
+  ADDSKUINFO_URL = '/admin/product/saveSkuInfo',
+  VIEWSKULIST_URL = '/admin/product/findBySpuId/',
+  DELETESPU_URL = '/admin/product/deleteAttr/',
+  GETSKU_URL = '/admin/product/list/',
+  ONSALE_URL = '/admin/product/onSale/',
+  CANCELSALE_URL = '/admin/product/cancelSale/',
 }
 
 //获取品牌分类数据的接口 /admin/product/baseTrademark/{page}/{limit}
@@ -98,8 +111,43 @@ export const reqSpuSale = (spuId: number) =>
   request.get<any, ALLSpuSaLes>(API.GETSPUSALE_URL + `${spuId}`)
 
 //获取整个项目全部的销售属性 /admin/product/baseSaleAttrList
-export const reqSpuLists = () =>request.get<any,ALLSpuSaLess>(API.GETSPUSALELIST_URL)
+export const reqSpuLists = () =>
+  request.get<any, ALLSpuSaLess>(API.GETSPUSALELIST_URL)
 
-//添加一个spu /admin/product/saveSpuInfo
+//添加|修改 一个spu /admin/product/saveSpuInfo  /admin/product/updateSpuInfo
+export const reqAddOrEditList = (data: SPUData) => {
+  if (data.id) {
+    //@ts-ignore 修改spu
+    return request.post<any, any>(API.EDITLIST_URL, data)
+  } else {
+    //@ts-ignore 添加spu
+    return request.post<any, any>(API.ADDLIST_URL, data)
+  }
+}
 
-//修改一个spu /admin/product/updateSpuInfo
+//追加一个新的SKU /admin/product/saveSkuInfo
+export const reqAddSkuInfo = (data: SkuData) =>
+  request.post<any, any>(API.ADDSKUINFO_URL, data)
+
+//查看sku的全部商品售卖属性 /admin/product/findBySpuId/{spuId}
+export const reqSkuView = (spuId: number) =>
+  request.get<any, SkuInfoData>(API.VIEWSKULIST_URL + `${spuId}`)
+
+//删除已有的spu数据 /admin/product/deleteAttr/{attrId}
+export const deleleSPU = (attrId: number) =>
+  request.delete<any, any>(API.DELETESPU_URL + `${attrId}`)
+
+//获取商品SKU的接口 /admin/product/list/{page}/{limit}
+export const reqSku = (page: number, limit: number) =>
+  request.get<any, SkuResponseData>(API.GETSKU_URL + `${page}/${limit}`)
+
+//上架操作 /admin/product/onSale/{skuId}   下架操作 /admin/product/cancelSale/{skuId}
+export const reqSaleSku = (row: SkuDatas) => {
+  if (row.isSale == 0) {
+    //上架
+    request.get<any, any>(API.ONSALE_URL + `${row.id}`)
+  } else {
+    //下架
+    request.get<any, any>(API.CANCELSALE_URL + `${row.id}`)
+  }
+}

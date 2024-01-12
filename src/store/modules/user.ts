@@ -1,7 +1,11 @@
 //创建用户小仓库
 import { defineStore } from 'pinia'
 import { reqLogin, reqUserInfo, reqLogOut } from '@/api/user/index'
-import type { loginResponseData, loginFormData,userResponseData } from '@/api/user/type'
+import type {
+  loginResponseData,
+  loginFormData,
+  userResponseData,
+} from '@/api/user/type'
 import type { UserState } from './dataType/type'
 import { SET_TOKEN, GET_TOKEN, DEL_TOKEN } from '@/utils/token'
 //创建用户小仓库
@@ -34,7 +38,7 @@ let useuserStore = defineStore('User', {
     //获取用户信息的方法
     async userInfo() {
       //发送请求
-      let result:userResponseData = await reqUserInfo()
+      let result: userResponseData = await reqUserInfo()
       if ((result.code = 200)) {
         //存储用户的头像、姓名
         this.username = result.data.name
@@ -47,7 +51,7 @@ let useuserStore = defineStore('User', {
 
     //退出登录
     async delLogin() {
-      let result:any = await reqLogOut();
+      let result: any = await reqLogOut()
       if (result.code == 200) {
         //清除头像，与名字\token
         this.username = ''
@@ -55,8 +59,8 @@ let useuserStore = defineStore('User', {
         this.token = ''
         // 清除token
         DEL_TOKEN()
-        return 'ok';
-      } else{
+        return 'ok'
+      } else {
         return Promise.reject(new Error(result.message))
       }
     },

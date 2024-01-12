@@ -82,13 +82,13 @@ export interface AttrResponseData extends ResponseData {
 
 //SPU数据的ts类型
 export interface SPUData {
-  id?: number
+  category3Id: number | string
+  id?: number | string
   spuName: string
   description: string
-  category3Id: number
   tmId: number
-  spuSaleAttrList: null
-  spuImageList: null
+  spuSaleAttrList: null | SpuSaLes[]
+  spuImageList: null | SpuImg[]
 }
 
 //数组：元素都是已有的spu数据类型
@@ -120,12 +120,14 @@ export interface ALLTradeMarkSPU extends ResponseData {
 
 //品牌图片的ts类型
 export interface SpuImg {
-  id: number
-  createTime: string
-  updateTime: string
-  spuId: number
+  id?: number
+  spuId?: number
   imgName: string
   imgUrl: string
+  createTime?: string
+  updateTime?: string
+  name?: string
+  url?: string
 }
 
 //品牌图片返回数据的ts类型
@@ -136,24 +138,26 @@ export interface ALLSpuImage extends ResponseData {
 //已有的销售属性ts类型
 export interface SpuSaLe {
   id?: number
-  createTime: null
-  updateTime: null
-  spuId: number
-  baseSaleAttrId: number
+  createTime?: string
+  updateTime?: string
+  spuId?: number
+  baseSaleAttrId: number | string
   saleAttrValueName: string
-  saleAttrName: string
-  isChecked: null
+  saleAttrName?: string
+  isChecked?: string
 }
 
 export type SpuSaLeValueList = SpuSaLe[]
 
 export interface SpuSaLes {
-  baseSaleAttrId: number
-  createTime: string
-  id?: number
+  baseSaleAttrId: number | string
   saleAttrName: string
-  spuId: number
+  createTime?: string
+  id?: number
+  spuId?: number
   spuSaleAttrValueList: SpuSaLeValueList
+  flag?: boolean
+  saleAttrValue?: string
 }
 
 export interface ALLSpuSaLes extends ResponseData {
@@ -163,11 +167,87 @@ export interface ALLSpuSaLes extends ResponseData {
 //某个品牌的销售属性
 export interface SpuSaLess {
   id?: number
-  createTime: string
-  updateTime: string
-  name:string
+  createTime?: string
+  updateTime?: string
+  name: string
 }
 
-export interface ALLSpuSaLess extends ResponseData{
-  data:SpuSaLess[]
+export interface ALLSpuSaLess extends ResponseData {
+  data: SpuSaLess[]
+}
+
+//sku数据ts类型
+export interface SkuData {
+  category3Id: number | string
+  spuId: number | string //已有的spu ID
+  tmId: number | string //spu品牌的ID
+  skuName: string
+  price: number | string
+  weight: string
+  skuDesc: string
+  skuAttrValueList: [
+    //平台属性
+    {
+      attrId?: number
+      valueId?: number
+    },
+  ]
+  skuSaleAttrValueList: [
+    //销售属性
+    {
+      saleAttrId?: number
+      saleAttrValueId?: number
+    },
+  ]
+  skuDefaultImg: string //sku图片地址
+}
+
+//获取sku数据接口的ts类型
+export interface SkuInfoData extends ResponseData {
+  data: SkuData[]
+}
+
+//定义Sku对象的ts类型
+export interface SkuDatas {
+  category3Id: number | string
+  spuId: number | string //已有的spu ID
+  tmId: number | string //spu品牌的ID
+  skuName: string
+  price: number | string
+  weight: string
+  skuDesc: string
+  skuAttrValueList: [
+    //平台属性
+    {
+      attrId?: number
+      valueId?: number
+    },
+  ]
+  skuSaleAttrValueList: [
+    //销售属性
+    {
+      saleAttrId?: number
+      saleAttrValueId?: number
+    },
+  ]
+  skuDefaultImg: string //sku图片地址
+  isSale?:number,
+  id?:number
+}
+
+//获取Sku接口返回数据的ts类型
+export interface SkuResponseData extends ResponseData {
+  data: {
+    records: SkuDatas[]
+    total: number
+    size: number
+    current: number
+    orders: []
+    optimizeCountSql: boolean
+    hitCount: boolean
+    countId: null
+    maxLimit: null
+    searchCount: boolean
+    pages: number
+  }
 }
