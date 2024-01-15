@@ -1,4 +1,4 @@
-p 100
+p 105
 
 //点击全屏图标的方法
 const fullScreen = () => {
@@ -57,20 +57,18 @@ attrParams.attrValueList.splice($index, 1);
 //赋值,(深拷贝)
 Object.assign(attrParams,JSON.parse(JSON.stringify(row)));
 
-
 //计算当前spu还未选中的销售属性
 let unSelectSaleAttr: any = computed(() => {
-  //过滤出未选中的销售属性，遍历全部的销售属性
-  let unSelect = spuSaless.value.filter(item => {
-    //测试对比属性名，返回值为true是值
-    return spuSales.value.every(item1 => {
-      //条件不等于则为true返回值为true的值（未选中的销售属性）
-      return item.name != item1.saleAttrName;
-    });
-  })
-  return unSelect;
+//过滤出未选中的销售属性，遍历全部的销售属性
+let unSelect = spuSaless.value.filter(item => {
+//测试对比属性名，返回值为true是值
+return spuSales.value.every(item1 => {
+//条件不等于则为true返回值为true的值（未选中的销售属性）
+return item.name != item1.saleAttrName;
+});
 })
-
+return unSelect;
+})
 
     //整理销售参数
     SkuParams.skuSaleAttrValueList  = spuSale.value.reduce((prev: any, next: any) => {
@@ -81,4 +79,5 @@ let unSelectSaleAttr: any = computed(() => {
       })
     }
     return prev
-  }, [])
+
+}, [])

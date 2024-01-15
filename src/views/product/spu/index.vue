@@ -2,29 +2,60 @@
   <div class="spu-container">
     <!-- 三级分类 -->
     <el-card class="box-cards">
-      <el-form :inline="true" style="display: flex;">
+      <el-form :inline="true" style="display: flex">
         <!-- 一级分类 -->
         <el-form-item label="一级分类">
-          <el-select placeholder="请选择" clearable v-model="category1Id" @change="reqCategoryone" :disabled="showbox == 2">
-            <el-option v-for="c1 in c1Spu" :key="c1.id" :label="c1.name" :value="c1.id" />
+          <el-select
+            placeholder="请选择"
+            clearable
+            v-model="category1Id"
+            @change="reqCategoryone"
+            :disabled="showbox == 2"
+          >
+            <el-option
+              v-for="c1 in c1Spu"
+              :key="c1.id"
+              :label="c1.name"
+              :value="c1.id"
+            />
           </el-select>
         </el-form-item>
 
         <!-- 二级分类 -->
 
         <el-form-item label="二级分类">
-          <el-select placeholder="请选择" clearable v-model="category2Id" @change="reqCategorytwo"
-            :disabled="select1 || showbox == 2">
-            <el-option v-for="c2 in c2Spu" :key="c2.id" :label="c2.name" :value="c2.id" />
+          <el-select
+            placeholder="请选择"
+            clearable
+            v-model="category2Id"
+            @change="reqCategorytwo"
+            :disabled="select1 || showbox == 2"
+          >
+            <el-option
+              v-for="c2 in c2Spu"
+              :key="c2.id"
+              :label="c2.name"
+              :value="c2.id"
+            />
           </el-select>
         </el-form-item>
 
         <!-- 三级分类 -->
 
         <el-form-item label="三级分类">
-          <el-select placeholder="请选择" clearable v-model="category3Id" @change="reqCategorythree"
-            :disabled="select2 || showbox == 2">
-            <el-option v-for="c3 in c3Spu" :key="c3.id" :label="c3.name" :value="c3.id" />
+          <el-select
+            placeholder="请选择"
+            clearable
+            v-model="category3Id"
+            @change="reqCategorythree"
+            :disabled="select2 || showbox == 2"
+          >
+            <el-option
+              v-for="c3 in c3Spu"
+              :key="c3.id"
+              :label="c3.name"
+              :value="c3.id"
+            />
           </el-select>
         </el-form-item>
       </el-form>
@@ -34,7 +65,12 @@
     <el-card class="box-card" v-show="showbox == 1">
       <template #header>
         <div class="card-header">
-          <el-button type="primary" :icon="Plus" @click="pushSpu" :disabled="trims">
+          <el-button
+            type="primary"
+            :icon="Plus"
+            @click="pushSpu"
+            :disabled="trims"
+          >
             添加SPU
           </el-button>
         </div>
@@ -42,24 +78,60 @@
       <!-- 表单主体 -->
       <div class="tables">
         <el-table style="width: 100%" border stripe :data="spuList">
-          <el-table-column label="序号" width="80" type="index" align="center"></el-table-column>
-          <el-table-column prop="spuName" label="SPU名称" width="180" align="center"></el-table-column>
-          <el-table-column prop="description" label="SPU描述" align="center"></el-table-column>
+          <el-table-column
+            label="序号"
+            width="80"
+            type="index"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="spuName"
+            label="SPU名称"
+            width="180"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="description"
+            label="SPU描述"
+            align="center"
+          ></el-table-column>
           <el-table-column label="操作" width="220" align="center">
             <template #="{ row, $index }">
               <!-- 添加按钮 -->
-              <el-button type="primary" :icon="Plus" size="small" @click="addSpu(row)"></el-button>
+              <el-button
+                type="primary"
+                :icon="Plus"
+                size="small"
+                @click="addSpu(row)"
+              ></el-button>
 
               <!-- 修改按钮 -->
-              <el-button type="warning" :icon="Edit" size="small" @click="editSpu(row)"></el-button>
+              <el-button
+                type="warning"
+                :icon="Edit"
+                size="small"
+                @click="editSpu(row)"
+              ></el-button>
 
               <!-- 详情按钮 -->
-              <el-button type="info" :icon="Warning" size="small" @click="infoSpu(row)"></el-button>
+              <el-button
+                type="info"
+                :icon="Warning"
+                size="small"
+                @click="infoSpu(row)"
+              ></el-button>
 
               <!-- 删除按钮 -->
-              <el-popconfirm :title="`删除属性${row.spuName}吗？`" @confirm="deletes(row)">
+              <el-popconfirm
+                :title="`删除属性${row.spuName}吗？`"
+                @confirm="deletes(row)"
+              >
                 <template #reference>
-                  <el-button type="danger" :icon="Delete" size="small"></el-button>
+                  <el-button
+                    type="danger"
+                    :icon="Delete"
+                    size="small"
+                  ></el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -70,9 +142,16 @@
       <!-- 分页器 -->
       <template #footer>
         <!-- 分页器   -->
-        <el-pagination v-model:current-page="pageNo" v-model:page-size="limit" :page-sizes="[9, 10, 15, 20]"
-          :background="true" layout=" prev, pager, next,jumper,->,sizes,total" :total="total"
-          @current-change="handleCurrentChange" @size-change="handleSizeChange" />
+        <el-pagination
+          v-model:current-page="pageNo"
+          v-model:page-size="limit"
+          :page-sizes="[9, 10, 15, 20]"
+          :background="true"
+          layout=" prev, pager, next,jumper,->,sizes,total"
+          :total="total"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
       </template>
     </el-card>
 
@@ -85,12 +164,30 @@
     <!-- dialog对话框：展示已有的sku数据 -->
     <el-dialog v-model="dialogVisible" title="SKU列表" width="70%">
       <el-table border :data="SkuArr" style="width: 100%">
-        <el-table-column label="SKU名称" prop="skuName" align="center"></el-table-column>
-        <el-table-column label="SKU价格" prop="price" width="90" align="center"></el-table-column>
-        <el-table-column label="SKU重量" prop="weight" width="90" align="center"></el-table-column>
+        <el-table-column
+          label="SKU名称"
+          prop="skuName"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="SKU价格"
+          prop="price"
+          width="90"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="SKU重量"
+          prop="weight"
+          width="90"
+          align="center"
+        ></el-table-column>
         <el-table-column label="SKU图片" align="center">
           <template #="{ row, $index }">
-            <img :src="row.skuDefaultImg" alt="" style="width: 100px; height:100px;">
+            <img
+              :src="row.skuDefaultImg"
+              alt=""
+              style="width: 100px; height: 100px"
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -106,14 +203,14 @@ import {
   reqGetCategorythree,
   reqSpuList,
   reqSkuView,
-  deleleSPU
+  deleleSPU,
 } from '@/api/product/index'
 import type {
   CategoryAll,
   HasSpuResponseData,
   SPUData,
   SkuData,
-  SkuInfoData
+  SkuInfoData,
 } from '@/api/product/type'
 import { Plus, Edit, Warning, Delete } from '@element-plus/icons-vue'
 import spuFrom from '@/views/product/spu/spuFrom/index.vue'
@@ -188,11 +285,11 @@ const reqCategoryone = async () => {
   showbox.value = 1
   pageNo.value = 1
   trims.value = true
-    //将二三级分类数据清空
-    ; (category2Id.value = copyData.value),
-      (category3Id.value = copyData.value),
-      //一级分类选中后解锁二级分类
-      (select1.value = false)
+  //将二三级分类数据清空
+  ;(category2Id.value = copyData.value),
+    (category3Id.value = copyData.value),
+    //一级分类选中后解锁二级分类
+    (select1.value = false)
   let result2: CategoryAll = await reqGetCategorytwo(
     category1Id.value as number,
   )
@@ -208,10 +305,10 @@ const reqCategorytwo = async () => {
   showbox.value = 1
   pageNo.value = 1
   trims.value = true
-    //将二三级分类数据清空
-    ; (category3Id.value = copyData.value),
-      //二级分类选中后解锁三级分类
-      (select2.value = false)
+  //将二三级分类数据清空
+  ;(category3Id.value = copyData.value),
+    //二级分类选中后解锁三级分类
+    (select2.value = false)
   let result3: CategoryAll = await reqGetCategorythree(
     category2Id.value as number,
   )
@@ -258,7 +355,6 @@ const addSpu = (row: any) => {
   showbox.value = 3
   //调用自组件方法
   sku.value.initSkuData(category1Id, category2Id, row)
-
 }
 
 //修改按钮的回调
@@ -282,11 +378,11 @@ const infoSpu = async (row: SPUData) => {
 //删除按钮的回调
 const deletes = async (row: SPUData) => {
   let resultq: any = await deleleSPU(row.id as number)
-  console.log(resultq);
+  console.log(resultq)
   if (resultq.code == 200) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: '删除成功',
     })
     //刷新页面
     reqData()
@@ -312,7 +408,7 @@ const handleSizeChange = (limit: number) => {
 
 //自组件spuFrom绑定的自定义事件
 const change = (num: number) => {
-  showbox.value = num;
+  showbox.value = num
   //发送请求
   reqData()
 }

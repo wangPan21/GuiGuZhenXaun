@@ -1,5 +1,5 @@
 //定义商品管理数据的ts类型
-//定义全部接口返回的参数的ts类型
+//定义全部接口返回参数的ts类型
 export interface ResponseData {
   code: number
   message: string
@@ -209,30 +209,30 @@ export interface SkuInfoData extends ResponseData {
 
 //定义Sku对象的ts类型
 export interface SkuDatas {
-  category3Id: number | string
-  spuId: number | string //已有的spu ID
-  tmId: number | string //spu品牌的ID
-  skuName: string
-  price: number | string
-  weight: string
-  skuDesc: string
-  skuAttrValueList: [
+  category3Id?: number | string
+  spuId?: number | string //已有的spu ID
+  tmId?: number | string //spu品牌的ID
+  skuName?: string
+  price?: number | string
+  weight?: string
+  skuDesc?: string
+  skuAttrValueList?: [
     //平台属性
     {
       attrId?: number
       valueId?: number
     },
   ]
-  skuSaleAttrValueList: [
+  skuSaleAttrValueList?: [
     //销售属性
     {
       saleAttrId?: number
       saleAttrValueId?: number
     },
   ]
-  skuDefaultImg: string //sku图片地址
-  isSale?:number,
-  id?:number
+  skuDefaultImg?: string //sku图片地址
+  isSale?: number
+  id?: number
 }
 
 //获取Sku接口返回数据的ts类型
@@ -250,4 +250,9 @@ export interface SkuResponseData extends ResponseData {
     searchCount: boolean
     pages: number
   }
+}
+
+//获取Sku商品详情接口的ts类型
+export interface SkuInifData extends ResponseData {
+  data:SkuDatas
 }

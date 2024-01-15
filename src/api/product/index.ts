@@ -15,6 +15,7 @@ import type {
   SkuInfoData,
   SkuResponseData,
   SkuDatas,
+  SkuInifData,
 } from './type'
 
 enum API {
@@ -41,6 +42,8 @@ enum API {
   GETSKU_URL = '/admin/product/list/',
   ONSALE_URL = '/admin/product/onSale/',
   CANCELSALE_URL = '/admin/product/cancelSale/',
+  SKUINFO_URL = '/admin/product/getSkuInfo/',
+  DELETESKU_URL = '/admin/product/deleteSku/',
 }
 
 //获取品牌分类数据的接口 /admin/product/baseTrademark/{page}/{limit}
@@ -151,3 +154,10 @@ export const reqSaleSku = (row: SkuDatas) => {
     request.get<any, any>(API.CANCELSALE_URL + `${row.id}`)
   }
 }
+
+//获取商品详情  /admin/product/getSkuInfo/{skuId}
+export const reqSkuInfo = (skuId: number) =>
+  request.get<any, SkuInifData>(API.SKUINFO_URL + `${skuId}`)
+
+//删除Sku商品  /admin/product/deleteSku/{skuId}
+export const deleteSku = (skuId:number) => request.delete<any,any>(API.DELETESKU_URL+`${skuId}`)

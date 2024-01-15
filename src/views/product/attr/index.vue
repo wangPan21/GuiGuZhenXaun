@@ -2,7 +2,7 @@
   <div class="stats-container">
     <!-- 头部 -->
     <el-card class="box-cards">
-      <el-form :inline="true" style="display: flex;">
+      <el-form :inline="true" style="display: flex">
         <!-- 一级分类 -->
         <el-form-item label="一级分类">
           <el-select
