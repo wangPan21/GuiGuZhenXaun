@@ -9,13 +9,13 @@ export interface ResponseData {
 //用户账号信息的ts类型
 export interface USer {
   id?: number | string
-  createTime: string
-  updateTime: string
-  username: string
-  password: string
-  name: string
-  phone: null
-  roleName: string
+  createTime?: string
+  updateTime?: string
+  username?: string
+  password?: string
+  name?: string
+  phone?: null
+  roleName?: string
 }
 
 //数组包含全部的用户信息

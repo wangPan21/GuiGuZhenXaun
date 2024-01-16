@@ -254,5 +254,5 @@ export interface SkuResponseData extends ResponseData {
 
 //获取Sku商品详情接口的ts类型
 export interface SkuInifData extends ResponseData {
-  data:SkuDatas
+  data: SkuDatas
 }

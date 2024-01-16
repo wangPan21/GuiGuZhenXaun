@@ -1,4 +1,4 @@
-p 105
+p 109
 
 //点击全屏图标的方法
 const fullScreen = () => {
@@ -81,3 +81,6 @@ return unSelect;
     return prev
 
 }, [])
+
+//浏览器自动刷新一次
+window.location.reload()

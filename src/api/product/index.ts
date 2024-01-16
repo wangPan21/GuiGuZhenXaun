@@ -160,4 +160,5 @@ export const reqSkuInfo = (skuId: number) =>
   request.get<any, SkuInifData>(API.SKUINFO_URL + `${skuId}`)
 
 //删除Sku商品  /admin/product/deleteSku/{skuId}
-export const deleteSku = (skuId:number) => request.delete<any,any>(API.DELETESKU_URL+`${skuId}`)
+export const deleteSku = (skuId: number) =>
+  request.delete<any, any>(API.DELETESKU_URL + `${skuId}`)
