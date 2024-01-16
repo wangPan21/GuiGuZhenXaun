@@ -32,20 +32,65 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="#" width="80" align="center" type="index" />
         <el-table-column label="Id" width="80" prop="id" align="center" />
-        <el-table-column label="用户姓名" width="100" prop="username" align="center" show-overflow-tooltip />
-        <el-table-column label="用户名称" width="100" prop="name" align="center" show-overflow-tooltip />
-        <el-table-column label="用户角色" width="100" prop="roleName" align="center" show-overflow-tooltip />
-        <el-table-column label="创建时间" width="100" prop="createTime" align="center" show-overflow-tooltip />
-        <el-table-column label="更新时间" width="100" prop="updateTime" align="center" show-overflow-tooltip />
+        <el-table-column
+          label="用户姓名"
+          width="100"
+          prop="username"
+          align="center"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="用户名称"
+          width="100"
+          prop="name"
+          align="center"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="用户角色"
+          width="100"
+          prop="roleName"
+          align="center"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="创建时间"
+          width="100"
+          prop="createTime"
+          align="center"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          label="更新时间"
+          width="100"
+          prop="updateTime"
+          align="center"
+          show-overflow-tooltip
+        />
         <el-table-column label="操作" width="280" align="center" fixed="right">
           <template #="{ row, $index }">
-            <el-button type="primary" size="small" :icon="User" @click="distUser(row)">
+            <el-button
+              type="primary"
+              size="small"
+              :icon="User"
+              @click="distUser(row)"
+            >
               分配角色
             </el-button>
-            <el-button type="warning" size="small" :icon="Edit" @click="editUser(row)">
+            <el-button
+              type="warning"
+              size="small"
+              :icon="Edit"
+              @click="editUser(row)"
+            >
               编辑
             </el-button>
-            <el-button type="danger" size="small" :icon="Delete" @click="delUser(row)">
+            <el-button
+              type="danger"
+              size="small"
+              :icon="Delete"
+              @click="delUser(row)"
+            >
               删除
             </el-button>
           </template>
@@ -53,25 +98,49 @@
       </el-table>
       <template #footer>
         <!-- 分页器-->
-        <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]" small
-          background layout="prev, pager, next, jumper,->,total, sizes" :total="total" @size-change="handleSizeChange"
-          @current-change="handleCurrentChange" />
+        <el-pagination
+          v-model:current-page="pageNo"
+          v-model:page-size="pageSize"
+          :page-sizes="[10, 20, 30, 40]"
+          small
+          background
+          layout="prev, pager, next, jumper,->,total, sizes"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </template>
     </el-card>
 
     <!-- 抽屉  v-model="drawer"-->
-    <el-drawer :title="userParams.id ? '修改用户' : '添加用户'" v-model="drawer">
+    <el-drawer
+      :title="userParams.id ? '修改用户' : '添加用户'"
+      v-model="drawer"
+    >
       <template #default>
         <!-- 身体部分 -->
         <el-form :model="userParams" :rules="rules" ref="form">
           <el-form-item label="用户姓名" prop="username">
-            <el-input placeholder="请填写用户名字" v-model="userParams.username"></el-input>
+            <el-input
+              placeholder="请填写用户名字"
+              v-model="userParams.username"
+            ></el-input>
           </el-form-item>
           <el-form-item label="用户昵称" prop="name">
-            <el-input placeholder="请填写用户昵称" v-model="userParams.name"></el-input>
+            <el-input
+              placeholder="请填写用户昵称"
+              v-model="userParams.name"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="用户密码" prop="password" v-show="userParams.id?false:true">
-            <el-input placeholder="请填写用户密码" v-model="userParams.password"></el-input>
+          <el-form-item
+            label="用户密码"
+            prop="password"
+            v-show="userParams.id ? false : true"
+          >
+            <el-input
+              placeholder="请填写用户密码"
+              v-model="userParams.password"
+            ></el-input>
           </el-form-item>
         </el-form>
       </template>
@@ -115,7 +184,7 @@ let drawer = ref<boolean>(false)
 let userParams = reactive<USer>({
   username: '',
   password: '',
-  name: ''
+  name: '',
 })
 
 //拷贝数据
@@ -156,7 +225,7 @@ const addUser = () => {
 }
 
 //批量删除按钮的回调
-const delAllUser = () => { }
+const delAllUser = () => {}
 
 //分配按钮的回调
 const distUser = (row: USer) => {
@@ -168,7 +237,7 @@ const distUser = (row: USer) => {
 //修改按钮的回调
 const editUser = (row: USer) => {
   // 已有的数据赋值给输入框
-  Object.assign(userParams,row)
+  Object.assign(userParams, row)
   //打开抽屉
   drawer.value = true
 }
@@ -190,7 +259,7 @@ const submit = async () => {
     drawer.value = false
     ElMessage({
       type: 'success',
-      message: userParams.id ? '修改成功' : '添加成功'
+      message: userParams.id ? '修改成功' : '添加成功',
     })
     //获取用户数据
     getData()
@@ -201,7 +270,7 @@ const submit = async () => {
     drawer.value = false
     ElMessage({
       type: 'error',
-      message: userParams.id ? '修改失败' : '添加失败'
+      message: userParams.id ? '修改失败' : '添加失败',
     })
   }
 }
@@ -264,17 +333,11 @@ const validatepassword = (rule: any, value: any, callback: any) => {
 //表单校验的规则对象
 const rules = {
   //用户名字
-  username: [
-    { required: true, validator: validateuserName, trigger: 'blur' }
-  ],
+  username: [{ required: true, validator: validateuserName, trigger: 'blur' }],
   //用户昵称
-  name: [
-    { required: true, validator: validatename, trigger: 'blur' }
-  ],
+  name: [{ required: true, validator: validatename, trigger: 'blur' }],
   //用户密码
-  password: [
-    { required: true, validator: validatepassword, trigger: 'blur' }
-  ]
+  password: [{ required: true, validator: validatepassword, trigger: 'blur' }],
 }
 </script>
 <script lang="ts">
