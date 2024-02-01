@@ -1,4 +1,3 @@
-import { path } from 'path'
 //@ts-ignore 路由鉴权配置文件
 import router from '@/router'
 //@ts-ignore

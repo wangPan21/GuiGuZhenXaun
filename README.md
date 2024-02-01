@@ -1,4 +1,4 @@
-p 109
+p 139
 
 //点击全屏图标的方法
 const fullScreen = () => {
@@ -84,3 +84,23 @@ return unSelect;
 
 //浏览器自动刷新一次
 window.location.reload()
+
+//合并数组
+let permissionId = arr.concat(arr1)
+
+//过滤menuArr的数据
+const filtersSelectArr = (allData: any, initArr: any) => {
+  allData.forEach((item: any) => {
+    //遍历数据，判断select是否为真，且level是4级
+    if (item.select && item.level == 4) {
+      //真，存储id
+      initArr.push(item.id)
+    }
+    //判断是否存在children且children数组的长度必须大于0
+    if (item.children && item.children.length > 0) {
+      //真，递归调用filtersSelectArr方法遍历筛选数据
+      filtersSelectArr(item.children, initArr)
+    }
+  });
+  return initArr;
+}

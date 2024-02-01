@@ -14,16 +14,10 @@
                 <el-input v-model="userInfo.username" :prefix-icon="User" />
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input
-                  show-password
-                  :prefix-icon="Lock"
-                  v-model="userInfo.password"
-                />
+                <el-input show-password :prefix-icon="Lock" v-model="userInfo.password" />
               </el-form-item>
             </el-form>
-            <div
-              style="display: flex; justify-content: center; margin-top: 40px"
-            >
+            <div style="display: flex; justify-content: center; margin-top: 40px">
               <el-button type="primary" @click="submit" :loading="loading">
                 登录
               </el-button>
@@ -140,7 +134,7 @@ const rules = {
   // 账号校验规则
   username: [{ required: true, validator: validatename, trigger: 'change' }],
 
-  // 账号校验规则
+  //密码校验规则
   password: [{ required: true, validator: validatepass, trigger: 'change' }],
 }
 </script>

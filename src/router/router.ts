@@ -119,6 +119,10 @@ export const constantRoute = [
     path: '/screen',
     component: () => import('@/views/screen/index.vue'),
     name: 'Screen',
+    meta: {
+      title: '数据大屏',
+      icon: 'Screen',
+    },
   },
   //404
   {

@@ -42,16 +42,14 @@ let uselayoutStore = useLayOutStore()
 let destroy = ref<boolean>(true)
 
 //监听tabbar组件是否点击刷新按钮
-watch(
-  () => uselayoutStore.refash,
-  () => {
-    //点击刷新按钮，销毁组件
-    destroy.value = false
-    // dom更新完毕，渲染组件
-    nextTick(() => {
-      destroy.value = true
-    })
-  },
+watch(() => uselayoutStore.refash, () => {
+  //点击刷新按钮，销毁组件
+  destroy.value = false
+  // dom更新完毕，渲染组件
+  nextTick(() => {
+    destroy.value = true
+  })
+},
 )
 </script>
 <script lang="ts">
@@ -67,7 +65,6 @@ export default {
   .right {
     width: 100%;
     height: 100vh;
-    background-color: #ffffff;
 
     .top {
       width: 100%;
@@ -75,7 +72,6 @@ export default {
       display: flex;
       align-items: center;
       padding: 0 0 0 10px;
-      border-bottom: 1px solid #eee;
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
 
